@@ -611,23 +611,45 @@ namespace Terminal.Gui {
 
 		public override bool ProcessKey (KeyEvent kb)
 		{
-			var result = InvokeKeybindings (kb);
-			if (result != null)
-				return (bool)result;
-
-			// TODO: rune-ify
-			if (barItems.Children != null && Char.IsLetterOrDigit ((char)kb.KeyValue)) {
-				var x = Char.ToUpper ((char)kb.KeyValue);
-				var idx = -1;
-				foreach (var item in barItems.Children) {
-					idx++;
-					if (item == null) continue;
-					if (item.IsEnabled () && item.HotKey == x) {
-						current = idx;
-						RunSelected ();
-						return true;
+			switch (kb.Key) {
+			case Key.Tab:
+				host.CleanUp ();
+				return true;
+			case Key.CursorUp:
+				return MoveUp ();
+			case Key.CursorDown:
+				return MoveDown ();
+			case Key.CursorLeft:
+				host.PreviousMenu (true);
+				return true;
+			case Key.CursorRight:
+				host.NextMenu (barItems.IsTopLevel || (barItems.Children != null && current > -1 && current < barItems.Children.Length && barItems.Children [current].IsFromSubMenu) ? false : true);
+				return true;
+			case Key.Esc:
+				Application.UngrabMouse ();
+				host.CloseAllMenus ();
+				return true;
+			case Key.Enter:
+				if (barItems.IsTopLevel) {
+					Run (barItems.Action);
+				} else if (current > -1) {
+					Run (barItems.Children [current].Action);
+				}
+				return true;
+			default:
+				// TODO: rune-ify
+				if (barItems.Children != null && Char.IsLetterOrDigit ((char)kb.KeyValue)) {
+					var x = Char.ToUpper ((char)kb.KeyValue);
+					foreach (var item in barItems.Children) {
+						if (item == null) continue;
+						if (item.IsEnabled () && item.HotKey == x) {
+							host.CloseMenu (false);
+							Run (item.Action);
+							return true;
+						}
 					}
 				}
+				break;
 			}
 			return host.ProcessHotKey (kb);
 		}
