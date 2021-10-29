@@ -95,8 +95,8 @@ namespace Terminal.Gui {
 	/// </para>
 	/// </remarks>
 	public class ListView : View {
-		int top, left;
-		int selected;
+		protected int top, left;
+		protected int selected;
 
 		IListDataSource source;
 		/// <summary>
