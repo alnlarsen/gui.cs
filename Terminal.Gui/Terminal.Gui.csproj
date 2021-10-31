@@ -1,16 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- =================================================================== -->
-  <!-- Version numbers -->
-  <!-- Automatically updated by gitversion (run `dotnet-gitversion /updateprojectfiles`)  -->
-  <!-- GitVersion.xml controls settings  -->
-  <!-- =================================================================== -->
-  <PropertyGroup>
-    <FileVersion>1.0.0.0</FileVersion>
-    <Version>1.0.0</Version>
-  </PropertyGroup>
-  <!-- =================================================================== -->
-  <!-- .NET Build Settings -->
-  <!-- =================================================================== -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>portable</DebugType>
     <VersionSuffix></VersionSuffix>
