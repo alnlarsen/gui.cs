@@ -1141,6 +1141,20 @@ namespace Terminal.Gui {
 			Driver.Refresh ();
 		}
 
+		public static void RefreshColorSchemes ()
+		{
+			foreach (var v in toplevels.Reverse ()) {
+				v.RefreshColorScheme ();
+			}
+		}
+
+		internal static void End (View view)
+		{
+			if (toplevels.Peek () != view)
+				throw new ArgumentException ("The view that you end with must be balanced");
+			toplevels.Pop ();
+
+			(view as Toplevel)?.OnClosed ((Toplevel)view);
 
 
 		/// <summary>
