@@ -526,18 +526,8 @@ namespace Terminal.Gui {
 
 			//start by clearing the entire line
 			Move (0, row);
-
-			Attribute color;
-
-			if(FullRowSelect && IsSelected (0, rowToRender)) {
-				color = focused ? rowScheme.HotFocus : rowScheme.HotNormal;
-			}
-			else 
-			{
-				color = Enabled ? rowScheme.Normal : rowScheme.Disabled;
-			}
-
-			Driver.SetAttribute (color);
+			Driver.SetAttribute (FullRowSelect && IsSelected (0, rowToRender) ? rowScheme.Focus
+				: Enabled ? rowScheme.Normal : rowScheme.Disabled);
 			Driver.AddStr (new string (' ', Bounds.Width));
 
 			// Render cells for each visible header for the current row
@@ -577,12 +567,7 @@ namespace Terminal.Gui {
 					scheme = rowScheme;
 				}
 
-				Attribute cellColor;
-				if (isSelectedCell) {
-					cellColor = focused ? scheme.HotFocus : scheme.HotNormal;
-				} else {
-					cellColor = Enabled ? scheme.Normal : scheme.Disabled;
-				}
+				var cellColor = isSelectedCell ? scheme.Focus : Enabled ? scheme.Normal : scheme.Disabled;
 
 				var render = TruncateOrPad (val, representation, current.Width, colStyle);
 
@@ -593,14 +578,8 @@ namespace Terminal.Gui {
 								
 				// Reset color scheme to normal for drawing separators if we drew text with custom scheme
 				if (scheme != rowScheme) {
-
-					if(isSelectedCell) {
-						color = focused ? rowScheme.HotFocus : rowScheme.HotNormal;
-					}
-					else {
-						color = Enabled ? rowScheme.Normal : rowScheme.Disabled;
-					}
-					Driver.SetAttribute (color);
+					Driver.SetAttribute (isSelectedCell ? rowScheme.Focus
+						: Enabled ? rowScheme.Normal : rowScheme.Disabled);
 				}
 
 				// If not in full row select mode always, reset color scheme to normal and render the vertical line (or space) at the end of the cell
