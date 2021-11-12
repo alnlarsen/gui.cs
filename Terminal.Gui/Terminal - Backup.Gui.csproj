@@ -1,0 +1,131 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>TRACE;DEBUG_IDISPOSABLE</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Version numbers are automatically updated by gitversion when a release is released -->
+    <!-- In the source tree the version will always be 1.0 for all projects. -->
+    <!-- Do not modify these. Do NOT commit after manually running `dotnet-gitversion /updateprojectfiles` -->
+    <AssemblyVersion>1.0</AssemblyVersion>
+    <FileVersion>1.0</FileVersion>
+    <Version>1.0</Version>
+    <InformationalVersion>1.0</InformationalVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+    <PackageReference Include="NStack.Core" Version="0.17.1" />
+    <InternalsVisibleTo Include="UnitTests" />
+  </ItemGroup>
+  <!-- Uncomment the RestoreSources element to have dotnet restore pull NStack from a local dir for testing -->
+  <PropertyGroup>
+      <MinVerSkip Condition="'$(Configuration)' == 'Debug'">true</MinVerSkip>
+  </PropertyGroup>
+  <!-- API Documentation -->
+  <ItemGroup>
+    <None Include="..\docfx\images\logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <!-- Enable Nuget Source Link for github -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+  </ItemGroup>
+  <PropertyGroup>
+    <!-- See Terminal.Gui/README.md for how version numbering works -->
+    <!-- This enables prefixing version tags with v, e.g. v1.0.0 Instead of 1.0.0 -->
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Terminal.Gui</RootNamespace>
+    <AssemblyName>Terminal.Gui</AssemblyName>
+    <DocumentationFile>bin\Release\Terminal.Gui.xml</DocumentationFile>
+    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <!--<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>-->
+    <PackageId>Terminal.Gui</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/gui-cs/Terminal.Gui/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/gui-cs/Terminal.Gui.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>csharp, terminal, c#, f#, gui, toolkit, console, tui</PackageTags>
+    <Description>Cross Platform Terminal UI toolkit for .NET</Description>
+    <Owners>Miguel de Icaza, Charlie Kindel</Owners>
+    <Summary>A toolkit for building rich console apps for .NET that works on Windows, Mac, and Linux/Unix.</Summary>
+    <Title>Terminal.Gui - Cross Platform Terminal user interface toolkit for .NET</Title>
+    <PackageReleaseNotes>
+      Release v1.7.2
+      * Fixes #1773. Base color scheme for ListView hard to read
+      * Fixes #1934. WindowsDriver crash when the height is less than 1 with the VS Debugger
+      
+      Release v1.7.1
+      * Fixes #1930. Trailing whitespace makes MessageBox.Query buttons disappear.
+      * Fixes #1921. Mouse continuous button pressed is not working on ScrollView.
+      * Fixes #1924. Wizard: Selected help text is unreadable
+
+      Release v1.7.0
+      * Moved Terminal.Gui (and NStack) to the github.com/gui-cs organization.
+      * Adds multi-step Wizard View for setup experiences (#124)
+      * The synchronization context method Send is now blocking (#1854).
+      * Fixes #1917. Sometimes Clipboard.IsSupported doesn't return the correct
+      * Fixes #1893: Fix URLs to match gui-cs Org
+      * Fixes #1883. Child TopLevels now get Loaded/Ready events.
+      * Fixes #1867, #1866, #1796. TextView enhancements for ReadOnly and WordWrap.
+      * Fixes #1861. Border: Title property is preferable to Text.
+      * Fixes #1855. Window and Frame content view without the margin frame.
+      * Fixes #1848. Mouse clicks in Windows Terminal.
+      * Fixes #1846. TabView now clips to the draw bounds.
+      * Fix TableView multi selections extending to -1 indexes
+      * Fixes #1837. Setting Unix clipboard freezes.
+      * Fixes #1839. Process WindowsDriver click event if location is the same after pressed and released.
+      * Fixes #1830. If "libcoreclr.so" is not present then "libncursesw.so" will be used.
+      * Fixes #1816. MessageBox: Hides underlying dialog when visible
+      * Fixes #1815. Now returns false if WSL clipboard isn't supported.
+      * Fixes #1825. Parent MenuItem stay focused if child MenuItem is empty.
+      * Fixes #1812, #1797, #1791. AutoSize fixes.
+      * Fixes #1818. Adds Title change events to Window.
+      * Fixes #1810. Dialog: Closing event is not fired when ESC is pressed to close dialog.
+      * Fixes #1793. ScrollBarView is hiding if the host fit the available space.
+      * Added Pos/Dim Function feature to automate layout.
+      * Fixes #1786. Windows Terminal is reporting well on mouse button pressed + mouse movement.
+      * Fixes #1777 - Dialog button justification. Adds unit tests.
+      * Fixes #1739. Setting menu UseKeysUpDownAsKeysLeftRight as false by default.
+      * Fixes #1772. Avoids WindowsDriver flickering when resizing.
+      * Fixed TableView always showing selected cell(s) even when not focused
+      * Fixes #1769. Supports a minimum view size for non-automatic size views.
+      * Exposes APIs to support upcoming Web console feature
+      * Fixes some scrolling performance issues
+      * Fixes #1763. Allowing read console inputs before idle handlers.
+      * TableView unicode scenario usability
+      * Added unicode testing code to TableEditor
+    </PackageReleaseNotes>
+  </PropertyGroup>
+</Project>
