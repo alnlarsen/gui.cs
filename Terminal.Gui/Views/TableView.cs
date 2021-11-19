@@ -305,9 +305,10 @@ namespace Terminal.Gui {
 			}
 
 			int headerLinesConsumed = line;
-
+			int linesToRender = style.ShowHorizontalRowUnderline ? frame.Height - 1 : frame.Height;
+			
 			//render the cells
-			for (; line < frame.Height; line++) {
+			for (; line < linesToRender; line++) {
 
 				ClearLine (line, bounds.Width);
 
@@ -319,6 +320,11 @@ namespace Terminal.Gui {
 					continue;
 
 				RenderRow (line, rowToRender, columnsToRender);
+			}
+			
+			// render row underline
+			if (style.ShowHorizontalRowUnderline) {
+				RenderRowUnderline (line, bounds.Width, columnsToRender);
 			}
 		}
 
@@ -502,9 +508,9 @@ namespace Terminal.Gui {
 						}
 
 					}
-					  // if the next console column is the lastcolumns end
-					  else if (Style.ExpandLastColumn == false &&
-							  columnsToRender.Any (r => r.IsVeryLast && r.X + r.Width - 1 == c)) {
+					// if the next console column is the lastcolumns end
+					else if (Style.ExpandLastColumn == false &&
+					         columnsToRender.Any (r => r.IsVeryLast && r.X + r.Width - 1 == c)) {
 						rune = Style.ShowVerticalCellLines ? '┼' : Driver.BottomTee;
 					}
 				}
@@ -512,6 +518,35 @@ namespace Terminal.Gui {
 				AddRuneAt (Driver, c, row, rune);
 			}
 
+		}
+
+		private void RenderRowUnderline (int row, int availableWidth, ColumnToRender [] columnsToRender)
+		{
+			// Renders a line above table headers (when visible) like:
+			// ┌────────────────────┬──────────┬───────────┬──────────────┬─────────┐
+
+			
+			for (int c = 0; c < availableWidth; c++) {
+
+				var rune = Driver.HLine;
+
+				if (c == 0) {
+					rune = Driver.LLCorner;
+				}
+				// if the next column is the start of a header
+				else if (columnsToRender.Any (r => r.X == c + 1)) {
+					rune = Driver.BottomTee;
+				} else if (c == availableWidth - 1) {
+					rune = Driver.LRCorner;
+				}
+				// if the next console column is the lastcolumns end
+				else if (Style.ExpandLastColumn == false &&
+				         columnsToRender.Any (r => r.IsVeryLast && r.X + r.Width - 1 == c)) {
+					rune = Driver.BottomTee;
+				}
+
+				AddRuneAt (Driver, c, row, rune);
+			}
 		}
 		private void RenderRow (int row, int rowToRender, ColumnToRender [] columnsToRender)
 		{
@@ -543,7 +578,7 @@ namespace Terminal.Gui {
 				// Set color scheme based on whether the current cell is the selected one
 				bool isSelectedCell = IsSelected (current.Column.Ordinal, rowToRender);
 
-				var val = Table.Rows [rowToRender] [current.Column];
+				var val = rowToRender >= Table.Rows.Count ? "" : Table.Rows [rowToRender] [current.Column];
 
 				// Render the (possibly truncated) cell value
 				var representation = GetRepresentation (val, colStyle);
@@ -1715,6 +1750,11 @@ namespace Terminal.Gui {
 			/// True to render a solid line under the headers
 			/// </summary>
 			public bool ShowHorizontalHeaderUnderline { get; set; } = true;
+			
+			/// <summary>
+			/// True to render a solid line above the last row
+			/// </summary>
+			public bool ShowHorizontalRowUnderline { get; set; } = true;
 
 			/// <summary>
 			/// True to render a solid line vertical line between cells
@@ -1777,6 +1817,11 @@ namespace Terminal.Gui {
 			/// </para>
 			/// </summary>
 			public bool SmoothHorizontalScrolling { get; set; } = true;
+			
+			/// <summary>
+			/// Stretches the last row of the table to fill in any available height. 
+			/// </summary>
+			public bool ExpandLastRow {get;set;} = true;
 			
 			/// <summary>
 			/// Returns the entry from <see cref="ColumnStyles"/> for the given <paramref name="col"/> or null if no custom styling is defined for it
