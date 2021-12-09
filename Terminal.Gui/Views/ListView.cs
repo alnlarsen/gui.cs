@@ -466,6 +466,8 @@ namespace Terminal.Gui {
 			return true;
 		}
 
+		public Action<bool, int> MarkUnmarkChanged;
+		
 		/// <summary>
 		/// Marks the <see cref="SelectedItem"/> if it is not already marked.
 		/// </summary>
@@ -475,6 +477,7 @@ namespace Terminal.Gui {
 			if (AllowsAll ()) {
 				Source.SetMark (SelectedItem, !Source.IsMarked (SelectedItem));
 				SetNeedsDisplay ();
+				MarkUnmarkChanged?.Invoke(Source.IsMarked (SelectedItem), SelectedItem);
 				return true;
 			}
 
