@@ -76,7 +76,7 @@ namespace Terminal.Gui {
 		void Initialize (ustring s, bool is_checked)
 		{
 			charChecked = new Rune (Driver != null ? Driver.Checked : '√');
-			charUnChecked = new Rune (Driver != null ? Driver.UnChecked : '╴');
+			charUnChecked = new Rune (Driver != null ? Driver.UnChecked : ' ');
 			Checked = is_checked;
 			HotKeySpecifier = new Rune ('_');
 			CanFocus = true;
@@ -100,10 +100,10 @@ namespace Terminal.Gui {
 			case TextAlignment.Left:
 			case TextAlignment.Centered:
 			case TextAlignment.Justified:
-				TextFormatter.Text = ustring.Make (Checked ? charChecked : charUnChecked) + " " + GetFormatterText ();
+				TextFormatter.Text = "[" + ustring.Make (Checked ? charChecked : charUnChecked) + "] " + GetFormatterText ();
 				break;
 			case TextAlignment.Right:
-				TextFormatter.Text = GetFormatterText () + " " + ustring.Make (Checked ? charChecked : charUnChecked);
+				TextFormatter.Text = GetFormatterText () + " [" + ustring.Make (Checked ? charChecked : charUnChecked) + "]";
 				break;
 			}
 		}
