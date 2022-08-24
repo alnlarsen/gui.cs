@@ -489,7 +489,13 @@ namespace Terminal.Gui {
 			var isDir = infos [selected].Item2;
 
 			if (isDir) {
-				Directory = Path.GetFullPath (Path.Combine (Path.GetFullPath (Directory.ToString ()), infos [selected].Item1));
+				if (infos[selected].Item1 == "..") {
+					string oldDirName = new DirectoryInfo(Directory.ToString ()).Name;
+					Directory = Path.GetFullPath (Path.Combine (Path.GetFullPath (Directory.ToString ()), infos [selected].Item1));
+					selected = Math.Max(0, infos.FindIndex (i => i.Item1 == oldDirName));
+				} else {
+					Directory = Path.GetFullPath (Path.Combine (Path.GetFullPath (Directory.ToString ()), infos [selected].Item1));
+				}
 				DirectoryChanged?.Invoke (Directory);
 				if (canChooseDirectories && !navigateFolder) {
 					return true;
