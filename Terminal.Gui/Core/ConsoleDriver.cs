@@ -326,6 +326,7 @@ namespace Terminal.Gui {
 		Attribute _hotNormal = new Attribute (Color.White, Color.Black);
 		Attribute _hotFocus = new Attribute (Color.White, Color.Black);
 		Attribute _disabled = new Attribute (Color.White, Color.Black);
+		internal string caller = ""; 
 
 		/// <summary>
 		/// Used by <see cref="Colors.SetColorScheme(ColorScheme, string)"/> and <see cref="Colors.GetColorScheme(string)"/> to track which ColorScheme 

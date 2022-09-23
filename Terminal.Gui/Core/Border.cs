@@ -1005,13 +1005,13 @@ namespace Terminal.Gui {
 			if (DrawMarginFrame) {
 				SetBorderBrushBackground (driver);
 				SetHotNormalBackground (view, driver);
-				var padding = view.Border.GetSumThickness ();
 				Rect scrRect;
 				if (view == Child) {
 					scrRect = view.ViewToScreen (new Rect (0, 0, view.Frame.Width + 2, view.Frame.Height + 2));
 					scrRect = new Rect (scrRect.X - 1, scrRect.Y - 1, scrRect.Width, scrRect.Height);
 					driver.DrawWindowTitle (scrRect, Title, 0, 0, 0, 0);
 				} else {
+					var padding = view.Border.GetSumThickness ();
 					scrRect = view.ViewToScreen (new Rect (0, 0, view.Frame.Width, view.Frame.Height));
 					driver.DrawWindowTitle (scrRect, Parent.Border.Title,
 						padding.Left, padding.Top, padding.Right, padding.Bottom);

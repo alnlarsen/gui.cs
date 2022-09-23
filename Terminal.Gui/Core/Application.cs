@@ -1155,7 +1155,7 @@ namespace Terminal.Gui {
 			toplevels.Pop ();
 
 			(view as Toplevel)?.OnClosed ((Toplevel)view);
-
+		} 
 
 		/// <summary>
 		///   Building block API: Runs the <see cref="MainLoop"/> for the created <see cref="Toplevel"/>.

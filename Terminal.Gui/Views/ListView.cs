@@ -390,8 +390,10 @@ namespace Terminal.Gui {
 						Driver.SetAttribute (current);
 					}
 					if (allowsMarking) {
-						Driver.AddStr ($"[{(source.IsMarked (item) ? (AllowsMultipleSelection ? Driver.Checked : Driver.Selected) :
-							(AllowsMultipleSelection ? Driver.UnChecked : Driver.UnSelected))}]");
+						var marking = source.IsMarked (item) ? 
+							AllowsMultipleSelection ? Driver.Checked : Driver.Selected : 
+							AllowsMultipleSelection ? Driver.UnChecked : Driver.UnSelected;
+						Driver.AddStr ($"[{marking}]");
 						Driver.AddRune (' ');
 					}
 					Source.Render (this, Driver, isSelected, item, col, row, f.Width - col, start);
