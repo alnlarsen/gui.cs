@@ -394,7 +394,7 @@ namespace Terminal.Gui {
 			case Key.V | Key.CtrlMask:
 			case Key.PageDown:
 				var n = (selected + Frame.Height);
-				if (n > infos.Count)
+				if (n >= infos.Count)
 					n = infos.Count - 1;
 				if (n != selected) {
 					selected = n;
